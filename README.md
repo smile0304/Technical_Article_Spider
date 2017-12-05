@@ -83,7 +83,15 @@ IMAGES_STORE = os.path.join(project_dir, 'images')	#images为图片的默认存�
 
   > 链接：https://pan.baidu.com/s/1jI3U6Y6 密码：i9fc
 
-   如果你想要修改图片的路径信息可以使用如下`sql`语句
+  ​
+
+  ​
+
+  导入数据
+
+  > source ~/4hou_Article.sql
+
+  如果你想要修改图片的路径信息可以使用如下`sql`语句
 
   > update 4hou_Article set image_local = REPLACE(image_local,'full','图片地址')
 
