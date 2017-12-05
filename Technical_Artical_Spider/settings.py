@@ -97,6 +97,6 @@ AUTOTHROTTLE_MAX_DELAY = 60
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 MYSQL_HOST = "127.0.0.1"
-MYSQL_DBNAME = "ArticleSpider"
+MYSQL_DBNAME = "sql_dbname"
 MYSQL_USER = "root"
-MYSQL_PASSWORD = "qwerasdf../"
+MYSQL_PASSWORD = "password"
