@@ -7,7 +7,6 @@
 from scrapy.loader import ItemLoader
 from scrapy.loader.processors import TakeFirst,MapCompose,Join,Identity
 import scrapy
-import time
 
 class TechnicalArticalSpiderItem(scrapy.Item):
     # define the fields for your item here like:
@@ -36,7 +35,7 @@ def remove_Keywords(value):
         value = value.replace("发布", "")
     if "前" in value:
         #now_time = time.strftime("%Y-%m-%d")
-
+        import time
         now_time = time.strftime('%Y-%m-%d',time.localtime(time.time()))
         return now_time
     else:
