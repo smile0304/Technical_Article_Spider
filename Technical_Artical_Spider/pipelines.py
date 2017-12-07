@@ -49,11 +49,15 @@ class MysqlTwistedPipline(object):
         insert_sql, params = item.get_insert_sql()
         cursor.execute(insert_sql, params)
 
-
-class ArticleImagePipeline(ImagesPipeline):
+class ImagesavepathPipline(ImagesPipeline):
+    path = "image"
     def file_path(self, request, response=None, info=None):
-        content_image = request.url.split('/')[-1]
-        return 'Cover_images/%s' % (content_image)
+        image = request.url.split('/')[-1]
+        path = self.path
+        return '%s/%s' % (path,image)
+
+class ArticleImagePipeline(ImagesavepathPipline):
+    path = "Cover_images_4hou"
 
     def item_completed(self, results, item, info):
         if "image_url" in item:
@@ -63,9 +67,7 @@ class ArticleImagePipeline(ImagesPipeline):
         return item
 
 class ArticlecontentImagePipline(ImagesPipeline):
-    def file_path(self, request, response=None, info=None):
-        content_image = request.url.split('/')[-1]
-        return 'Content_images/%s' % (content_image)
+    path = "Content_images_4hou"
 
     def get_media_requests(self, item, info):
         if len(item["ArticlecontentImage"]):
