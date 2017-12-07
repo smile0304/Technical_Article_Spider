@@ -125,3 +125,51 @@ class ArticleSpider4hou(scrapy.Item):
               self["content"]
                   )
         return insert_sql,params
+
+#安全客文章Iten
+class ArticleSpideranquanke(scrapy.Item):
+    id = scrapy.Field()
+    url = scrapy.Field()
+    title = scrapy.Field()
+    create_time= scrapy.Field()
+    image_url = scrapy.Field()
+    image_local = scrapy.Field()
+    watch_num = scrapy.Field()
+    tags = scrapy.Field()
+    author = scrapy.Field()
+    comment_num = scrapy.Field()
+    content = scrapy.Field()
+    ArticlecontentImage = scrapy.Field()
+
+    def get_insert_sql(self):
+        insert_sql = """
+            insert into anquanke_article(
+            id,
+            url,
+            title,
+            create_time,
+            cover_image_url,
+            cover_local,
+            watch_num,
+            tags,
+            author,
+            comment_num,
+            content
+            )
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE watch_num=VALUES(watch_num),
+            comment_num=VALUES(comment_num)
+        """
+        params = (
+            self["id"],
+            self["url"],
+            self["title"],
+            self["create_time"],
+            self["image_url"],
+            self["image_local"],
+            self["watch_num"],
+            self["tags"],
+            self["author"],
+            self["comment_num"],
+            self["content"]
+        )
+        return insert_sql, params

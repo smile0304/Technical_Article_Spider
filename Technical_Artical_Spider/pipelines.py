@@ -66,7 +66,7 @@ class ArticleImagePipeline(ImagesavepathPipline):
             item["image_local"] = image_file_path
         return item
 
-class ArticlecontentImagePipline(ImagesPipeline):
+class ArticlecontentImagePipline(ImagesavepathPipline):
     path = "Content_images_4hou"
 
     def get_media_requests(self, item, info):
@@ -103,3 +103,49 @@ class ArticleHTMLreplacePipline(object):
         item["content"] = content
         return item
 
+#安全客文章封面图处理
+class Anquanke_ArticleImagePipeline(ImagesavepathPipline):
+    path = "Cover_images_anquanke"
+
+    def item_completed(self, results, item, info):
+        if "image_url" in item:
+            for ok,value in results:
+                image_file_path = value["path"]
+            item["image_local"] = image_file_path
+        return item
+
+class Anquanke_ArticlecontentImagePipline(ImagesavepathPipline):
+    path = "Content_images_anquanke"
+
+    def get_media_requests(self, item, info):
+        if len(item["ArticlecontentImage"]):
+            for image_content_url in item["ArticlecontentImage"]:
+                print(image_content_url)
+                yield scrapy.Request(image_content_url)
+
+    def item_completed(self, results, item, info):
+        return_list = []
+        if "ArticlecontentImage" in item:
+            for ok,value in results:
+                image_content_path = value["path"]
+                return_list.append(image_content_path)
+            item["ArticlecontentImage"] = return_list
+        return item
+
+class Anquanke_ArticleHTMLreplacePipline(object):
+    # exchange html <img>
+    def process_item(self,item,spider):
+        if "content" not in item:
+            return item
+        content = item["content"]
+        sum = len(re.findall('<img class="size-full.*>',content))
+        if sum != len(item["ArticlecontentImage"]):
+            return item
+        if item["ArticlecontentImage"]:
+            for exf in range(sum):
+                html = item["ArticlecontentImage"][exf]
+                html = '<center><p><img src="../images/{0}" /></p></center>'.format(html)
+                content = re.sub('<img class="size-full.*>',html,content,1)
+
+        item["content"] = content
+        return item

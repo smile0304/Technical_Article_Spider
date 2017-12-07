@@ -52,9 +52,9 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'Technical_Artical_Spider.middlewares.MyCustomDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+    'Technical_Artical_Spider.middlewares.ChromMiddleware': 1,
+}
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
@@ -64,12 +64,19 @@ ROBOTSTXT_OBEY = False
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-
+"""
 ITEM_PIPELINES = {
     'Technical_Artical_Spider.pipelines.MysqlTwistedPipline': 30,
     'Technical_Artical_Spider.pipelines.ArticleImagePipeline': 1,
     'Technical_Artical_Spider.pipelines.ArticlecontentImagePipline': 10,
     'Technical_Artical_Spider.pipelines.ArticleHTMLreplacePipline': 20,
+}
+"""
+ITEM_PIPELINES = {
+    'Technical_Artical_Spider.pipelines.MysqlTwistedPipline': 30,
+    'Technical_Artical_Spider.pipelines.Anquanke_ArticleImagePipeline': 1,
+    'Technical_Artical_Spider.pipelines.Anquanke_ArticlecontentImagePipline': 10,
+    'Technical_Artical_Spider.pipelines.Anquanke_ArticleHTMLreplacePipline': 20,
 }
 
 IMAGES_URLS_FIELD = "image_url"
@@ -97,6 +104,8 @@ AUTOTHROTTLE_MAX_DELAY = 60
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 MYSQL_HOST = "127.0.0.1"
-MYSQL_DBNAME = "sql_dbname"
+MYSQL_DBNAME = "ArticleSpider"
 MYSQL_USER = "root"
-MYSQL_PASSWORD = "password"
+MYSQL_PASSWORD = "qwerasdf../"
+#
+EXECUTABLE_PATH = "/home/tt/chromedriver"
