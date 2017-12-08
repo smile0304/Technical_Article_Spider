@@ -28,7 +28,7 @@
   >
   > """
   >
-  > sudo pip install scrapy mysqlclient
+  > sudo pip install scrapy mysqlclient selenium
   >
   > git clone https://github.com/smile0304/Technical_Article_Spider.git
 
@@ -36,7 +36,7 @@
 
 - Windows下的安装
 
-  > pip install scrapy PIL mysqlclient 
+  > pip install scrapy PIL mysqlclient selenium
   >
   > git clone https://github.com/smile0304/Technical_Article_Spider.git
 
@@ -73,12 +73,13 @@ AUTOTHROTTLE_START_DELAY = 2	#请求的延时(需要AUTOTHROTTLE_ENABLED=True)
 AUTOTHROTTLE_MAX_DELAY = 60   #如果网络差的最大等待时长(需要AUTOTHROTTLE_ENABLED=True)
 
 IMAGES_STORE = os.path.join(project_dir, 'images')	#images为图片的默认存放地址
+
+EXECUTABLE_PATH="路径信息"
 ```
 
 
 
-#### 数据
-
+#### 数据(待更新)
 - 2017年12月5日爬去的第一份数据
 
   > 链接：https://pan.baidu.com/s/1jI3U6Y6 密码：i9fc
@@ -96,6 +97,9 @@ IMAGES_STORE = os.path.join(project_dir, 'images')	#images为图片的默认存�
   > update 4hou_Article set image_local = REPLACE(image_local,'full','图片地址')
 
 #### 更新日志
-
+- 2017年12月8日更新
+  - 对安全客进行爬去
+  - 完成图片的分类
+  - 优化代码性能,降低冗余性
 - 2017年12月5日首次提交
   - 当前版本仅对嘶吼的文章进行爬取
