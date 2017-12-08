@@ -10,6 +10,7 @@ import scrapy
 import re
 from twisted.enterprise import adbapi
 from scrapy.pipelines.images import ImagesPipeline
+from Technical_Artical_Spider.items import ArticleSpideranquanke,ArticleSpider4hou
 
 class TechnicalArticalSpiderPipeline(object):
     def process_item(self, item, spider):
@@ -51,55 +52,84 @@ class MysqlTwistedPipline(object):
 
 class ImagesavepathPipline(ImagesPipeline):
     path = "image"
+
     def file_path(self, request, response=None, info=None):
         image = request.url.split('/')[-1]
         path = self.path
         return '%s/%s' % (path,image)
 
+#文章封面图处理
 class ArticleImagePipeline(ImagesavepathPipline):
-    path = "Cover_images_4hou"
-
-    def item_completed(self, results, item, info):
-        if "image_url" in item:
-            for ok,value in results:
-                image_file_path = value["path"]
-            item["image_local"] = image_file_path
-        return item
-
-class ArticlecontentImagePipline(ImagesPipeline):
-    path = "Content_images_4hou"
+    Cover_image = "image_url"
 
     def get_media_requests(self, item, info):
-        if len(item["ArticlecontentImage"]):
-            for image_content_url in item["ArticlecontentImage"]:
-                print(image_content_url)
+        if isinstance(item,ArticleSpideranquanke):
+            self.path = "Cover_images_anquanke"
+        elif isinstance(item,ArticleSpider4hou):
+            self.path = "Cover_images_4hou"
+        if len(item[self.Cover_image]):
+            if isinstance(item,ArticleSpider4hou):
+                for image_content_url in item[self.Cover_image]:
+                    yield scrapy.Request(image_content_url.split("?")[0])
+            else:
+                for image_content_url in item[self.Cover_image]:
+                    yield scrapy.Request(image_content_url)
+
+    def item_completed(self, results, item, info):
+        if self.Cover_image in item:
+            for ok, value in results:
+                image_file_path = value["path"]
+            item[self.Cover_image] = image_file_path
+        return item
+
+#下载文章图片
+class ArticlecontentImagePipline(ImagesavepathPipline):
+    contentImage = "ArticlecontentImage"
+    def get_media_requests(self, item, info):
+        if isinstance(item,ArticleSpideranquanke):
+            self.path = "Content_images_anquanke"
+        elif isinstance(item,ArticleSpider4hou):
+            self.path = "Content_images_4hou"
+        if len(item[self.contentImage]):
+            for image_content_url in item[self.contentImage]:
                 yield scrapy.Request(image_content_url)
 
     def item_completed(self, results, item, info):
         return_list = []
-        if "ArticlecontentImage" in item:
+        if self.contentImage in item:
             for ok,value in results:
                 image_content_path = value["path"]
                 return_list.append(image_content_path)
-            item["ArticlecontentImage"] = return_list
+            item[self.contentImage] = return_list
         return item
-
-
+#处理文章中图片的替换
 class ArticleHTMLreplacePipline(object):
     # exchange html <img>
     def process_item(self,item,spider):
-        if "content" not in item:
+        if spider.name == "4hou":
+            itemcontentname = "content"
+            re_findall = '<p style="text-align.*<img.*[<\/noscript>$]'
+            re_sub = '<p style="text-align.*<img.*[<\/noscript>$]'
+            re_replace = '<center><p><img src="../images/{0}" /></p></center>'
+            contentImage = "ArticlecontentImage"
+        elif spider.name=="anquanke360":
+            itemcontentname = "content"
+            re_findall = '<img.*\.[png|jpg|gif|jpeg].*>'
+            re_sub = '<img class=.*\.[png|jpg|gif|jpeg].*>'
+            re_replace = '<center><p><img src="../images/{0}" /></p></center>'
+            contentImage = "ArticlecontentImage"
+        if itemcontentname not in item:
             return item
-        content = item["content"]
-        sum = len(re.findall('<p style="text-align.*<img.*[<\/noscript>$]',content))
-        if sum != len(item["ArticlecontentImage"]):
+        content = item[itemcontentname]
+        sum = len(re.findall(re_findall,content))
+        if sum != len(item[contentImage]):
             return item
-        if item["ArticlecontentImage"]:
+        if item[contentImage]:
             for exf in range(sum):
-                html = item["ArticlecontentImage"][exf]
-                html = '<center><p><img src="../images/{0}" /></p></center>'.format(html)
-                content = re.sub('<p style="text-align.*<img.*[<\/noscript>$]',html,content,1)
+                html = item[contentImage][exf]
+                html = re_replace.format(html)
+                content = re.sub(re_sub,html,content,1)
 
         item["content"] = content
-        return item
 
+        return item

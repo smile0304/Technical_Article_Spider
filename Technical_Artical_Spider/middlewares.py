@@ -6,7 +6,7 @@
 # http://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
-
+import re
 
 class TechnicalArticalSpiderSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -54,3 +54,15 @@ class TechnicalArticalSpiderSpiderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+
+from scrapy.http import HtmlResponse
+
+class ChromMiddleware(object):
+
+    def process_request(self,request,spider):
+        if request.url.startswith("https://www.anquanke.com/post/id/") and spider.name == "anquanke360":
+            spider.browser.get(request.url)
+            import time
+            time.sleep(1.5)
+            return HtmlResponse(url=spider.browser.current_url,body=spider.browser.page_source,encoding="utf-8", request=request)
