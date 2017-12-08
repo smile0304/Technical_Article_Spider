@@ -64,19 +64,12 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-"""
+
 ITEM_PIPELINES = {
     'Technical_Artical_Spider.pipelines.MysqlTwistedPipline': 30,
     'Technical_Artical_Spider.pipelines.ArticleImagePipeline': 1,
     'Technical_Artical_Spider.pipelines.ArticlecontentImagePipline': 10,
     'Technical_Artical_Spider.pipelines.ArticleHTMLreplacePipline': 20,
-}
-"""
-ITEM_PIPELINES = {
-    'Technical_Artical_Spider.pipelines.MysqlTwistedPipline': 30,
-    'Technical_Artical_Spider.pipelines.Anquanke_ArticleImagePipeline': 1,
-    'Technical_Artical_Spider.pipelines.Anquanke_ArticlecontentImagePipline': 10,
-    'Technical_Artical_Spider.pipelines.Anquanke_ArticleHTMLreplacePipline': 20,
 }
 
 IMAGES_URLS_FIELD = "image_url"
