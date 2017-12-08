@@ -120,7 +120,6 @@ class Anquanke_ArticlecontentImagePipline(ImagesavepathPipline):
     def get_media_requests(self, item, info):
         if len(item["ArticlecontentImage"]):
             for image_content_url in item["ArticlecontentImage"]:
-                print(image_content_url)
                 yield scrapy.Request(image_content_url)
 
     def item_completed(self, results, item, info):
@@ -138,14 +137,14 @@ class Anquanke_ArticleHTMLreplacePipline(object):
         if "content" not in item:
             return item
         content = item["content"]
-        sum = len(re.findall('<img class="size-full.*>',content))
+        sum = len(re.findall('<img.*\.[png|jpg|gif|jpeg].*>',content))
         if sum != len(item["ArticlecontentImage"]):
             return item
         if item["ArticlecontentImage"]:
             for exf in range(sum):
                 html = item["ArticlecontentImage"][exf]
                 html = '<center><p><img src="../images/{0}" /></p></center>'.format(html)
-                content = re.sub('<img class="size-full.*>',html,content,1)
+                content = re.sub('<img class=.*\.[png|jpg|gif|jpeg].*>',html,content,1)
 
         item["content"] = content
         return item
