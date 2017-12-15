@@ -48,6 +48,12 @@ class A4houSpider(scrapy.Spider):
         item_loader.add_css("praise_nums",".newtype .Praise span::text")
         item_loader.add_css("content",".article_cen")
         #文章中引用的图片
-        item_loader.add_css("ArticlecontentImage",".article_cen img::attr(data-original)")
+        if response.css(".article_cen img::attr(data-original)").extract():
+            item_loader.add_css("ArticlecontentImage",".article_cen img::attr(data-original)")
+        else:
+            imgs = re.findall('<p style="text-align:.*center">([\s\S].*)</p>', response.body.decode('utf-8'))
+            #TODO imgs = ['<img src="/uploads/20171208/1512719385618983.png" title="1512719385618983.png" alt="1.png"/>']
+            imgs = [re.search('src="(/.*/.*/.*?)"',i).group(1) for i in imgs if re.search('src="(.*?)"', i)]
+            item_loader.add_value("ArticlecontentImage",imgs)
         article_item = item_loader.load_item()
         yield article_item

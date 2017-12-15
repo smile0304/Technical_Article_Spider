@@ -66,7 +66,8 @@ DOWNLOADER_MIDDLEWARES = {
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 
 ITEM_PIPELINES = {
-    'Technical_Artical_Spider.pipelines.MysqlTwistedPipline': 30,
+    #'Technical_Artical_Spider.pipelines.MysqlTwistedPipline': 30,
+    'Technical_Artical_Spider.pipelines.ElasticsearchPipline': 30,
     'Technical_Artical_Spider.pipelines.ArticleImagePipeline': 1,
     'Technical_Artical_Spider.pipelines.ArticlecontentImagePipline': 10,
     'Technical_Artical_Spider.pipelines.ArticleHTMLreplacePipline': 20,

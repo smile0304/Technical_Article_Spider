@@ -6,7 +6,31 @@
 # http://doc.scrapy.org/en/latest/topics/items.html
 from scrapy.loader import ItemLoader
 from scrapy.loader.processors import TakeFirst,MapCompose,Join,Identity
+from Technical_Artical_Spider.models.elsticsearch_type_4hou import Article_4houType
+from Technical_Artical_Spider.models.elsticsearch_type_anquanke import Article_anquankeType
+from elasticsearch_dsl.connections import connections
+es_4hou = connections.create_connection(Article_4houType._doc_type.using)
+es_anquanke = connections.create_connection(Article_anquankeType._doc_type.using)
 import scrapy
+
+def gen_suggests(es,index,info_tuple):
+    #根据字符串生生搜索建议数据
+    used_words = set() #供去重使用
+    suggests = []
+    for text,weight in info_tuple:
+        if text:
+            #调用es的analyze接口分析字符串
+            words = es.indices.analyze(index=index,analyzer="ik_max_word",params={'filter':["lowercase"]},body=text)
+            anylyzed_words = set([r["token"] for r in words["tokens"] if len(r["token"])>1])
+            new_words = anylyzed_words - used_words
+        else:
+            new_words = set()
+
+        if new_words:
+            suggests.append({"input":list(new_words),"weight":weight})
+
+    return suggests
+
 
 class TechnicalArticalSpiderItem(scrapy.Item):
     # define the fields for your item here like:
@@ -123,6 +147,24 @@ class ArticleSpider4hou(scrapy.Item):
               self["content"]
                   )
         return insert_sql,params
+    ##将数据写入es
+    def save_to_es(self):
+        article = Article_4houType()
+        article.image_local = self["image_url"]
+        article.title = self["title"]
+        article.url_id = self["url_id"]
+        article.create_date = self["create_date"]
+        article.url = self["url"]
+        article.author = self["author"]
+        article.tags = self["tags"]
+        article.watch_nums = self["watch_num"]
+        article.comment_nums = self["comment_num"]
+        article.praise_nums = self["praise_nums"]
+        article.content = self["content"]
+        article.suggest = gen_suggests(es_4hou,Article_4houType._doc_type.index,((article.title,10),(article.tags,7)))
+        article.save()
+
+        return
 
 #安全客文章Iten
 class ArticleSpideranquanke(scrapy.Item):
@@ -169,3 +211,20 @@ class ArticleSpideranquanke(scrapy.Item):
             self["content"]
         )
         return insert_sql, params
+    #将代码写入es
+    def save_to_es(self):
+        article = Article_anquankeType()
+        article.id = self["id"]
+        article.url = self["url"]
+        article.title = self["title"]
+        article.create_time = self["create_time"]
+        article.cover_local = self["image_url"]
+        article.watch_num = self["watch_num"]
+        article.tags = self["tags"]
+        article.author = self["author"]
+        article.comment_num = self["comment_num"]
+        article.content = self["content"]
+        article.suggest = gen_suggests(es_anquanke,Article_anquankeType._doc_type.index,((article.title,10),(article.tags,7)))
+        article.save()
+
+        return

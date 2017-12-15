@@ -50,6 +50,15 @@ class MysqlTwistedPipline(object):
         insert_sql, params = item.get_insert_sql()
         cursor.execute(insert_sql, params)
 
+
+#将数据写入elsticsearch
+class ElasticsearchPipline(object):
+    #将数据写入到es中,
+    def process_item(self,item,spider):
+        #提升代码性能
+        item.save_to_es()
+        return item
+
 class ImagesavepathPipline(ImagesPipeline):
     path = "image"
 
