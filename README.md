@@ -32,6 +32,16 @@
 >
 >git clone https://github.com/medcl/elasticsearch-rtf.git
 
+配置ChromeDriver路径
+
+> vim Technical_Artical_Spider/Technical_Artical_Spider/settings.py
+>
+> """修改
+>
+> EXECUTABLE_PATH="配置google Driver路径信息"
+
+[ChromeDriver下载地址](http://chromedriver.storage.googleapis.com/index.html?path=2.7/)(自备梯子)
+
 #### 使用方法
 
 > python3 Technical_Article_Spider/models/elsticsearch_type_4hou.py
@@ -106,7 +116,7 @@ AUTOTHROTTLE_MAX_DELAY = 60   #如果网络差的最大等待时长(需要AUTOTH
 
 IMAGES_STORE = os.path.join(project_dir, 'images')	#images为图片的默认存放地址
 
-EXECUTABLE_PATH="路径信息"
+EXECUTABLE_PATH="配置ChromeDriver路径信息"
 ```
 
 
