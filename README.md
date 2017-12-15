@@ -2,7 +2,7 @@
 
 #### 一个爬取国内技术站点的技术文章
 
-
+为了方便之后的搜索引擎搭建,改用`elasticsearch`
 
 开发环境:
 
@@ -10,9 +10,39 @@
 
 
 - Scrapy ==1.4.0
-- MySql
+- elasticsearch-rtf
 
-#### 安装与使用
+#### 最新版本安装
+
+- Linux安装
+
+> sudo apt-get install python3-pip git
+>
+> sudo pip install scrapy mysqlclient selenium
+>
+> git clone https://github.com/medcl/elasticsearch-rtf.git
+>
+> git clone https://github.com/smile0304/Technical_Article_Spider.git
+
+- Windows安装
+
+>pip install scrapy PIL mysqlclient selenium
+>
+>git clone https://github.com/smile0304/Technical_Article_Spider.git
+>
+>git clone https://github.com/medcl/elasticsearch-rtf.git
+
+#### 使用方法
+
+> python3 Technical_Article_Spider/models/elsticsearch_type_4hou.py
+>
+> python3 Technical_Article_Spider/models/elsticsearch_type_anquanke.py
+>
+> cd Technical_Article_Spider
+>
+> scrapy crawl [ 4hou | anquanke360 ]
+
+#### 如果你想要使用`Mysql`存储数据
 
 - Linux下的安装
 
@@ -63,6 +93,8 @@
   >
   > source ~/Technical_Artical_Spider/4hou_Article-struct.sql
 
+
+
 #### 还可以修改的一些配置
 
 ```python
@@ -92,8 +124,6 @@ EXECUTABLE_PATH="路径信息"
 
   ​
 
-  ​
-
   导入数据
 
   > source ~/4hou_Article.sql
@@ -103,6 +133,12 @@ EXECUTABLE_PATH="路径信息"
   > update 4hou_Article set image_local = REPLACE(image_local,'full','图片地址')
 
 #### 更新日志
+
+- 2017年12月15日
+  - 弃用`Mysql`保存数据库
+  - 使用`elasticsearch`保存数据
+
+
 - 2017年12月8日更新
   - 对安全客进行爬去
 

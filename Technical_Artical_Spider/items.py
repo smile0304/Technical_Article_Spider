@@ -6,8 +6,8 @@
 # http://doc.scrapy.org/en/latest/topics/items.html
 from scrapy.loader import ItemLoader
 from scrapy.loader.processors import TakeFirst,MapCompose,Join,Identity
-from Technical_Artical_Spider.models.elsticsearch_type_4hou import Article_4houType
-from Technical_Artical_Spider.models.elsticsearch_type_anquanke import Article_anquankeType
+from Technical_Artical_Spider.models.elaticsearch_type_4hou import Article_4houType
+from Technical_Artical_Spider.models.elaticsearch_type_anquanke import Article_anquankeType
 from elasticsearch_dsl.connections import connections
 es_4hou = connections.create_connection(Article_4houType._doc_type.using)
 es_anquanke = connections.create_connection(Article_anquankeType._doc_type.using)
