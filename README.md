@@ -16,7 +16,7 @@
 
 - Linux安装
 
-> sudo apt-get install python3-pip git
+> sudo apt-get install python3-pip git xvfb
 >
 > sudo pip install scrapy mysqlclient selenium
 >
@@ -79,6 +79,13 @@
   > pip install scrapy PIL mysqlclient selenium
   >
   > git clone https://github.com/smile0304/Technical_Article_Spider.git
+
+  windows下运行需要注释掉`anquanke360.py`中的
+
+  >```python
+  >display = Display(visible=0,size=(800,600))
+  >display.start()
+  >```
 
   ​
 
@@ -144,6 +151,11 @@ EXECUTABLE_PATH="配置ChromeDriver路径信息"
 
 #### 更新日志
 
+- 2017年12月18日
+  - 数据分库
+  - 设置浏览器为无界面
+
+
 - 2017年12月15日
   - 弃用`Mysql`保存数据库
   - 使用`elasticsearch`保存数据
@@ -156,6 +168,5 @@ EXECUTABLE_PATH="配置ChromeDriver路径信息"
 
   - 优化代码性能,降低冗余性
 
-    ​
 - 2017年12月5日首次提交
   - 当前版本仅对嘶吼的文章进行爬取

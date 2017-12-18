@@ -7,6 +7,7 @@ from selenium import webdriver
 from scrapy.xlib.pydispatch import dispatcher
 from scrapy import signals
 from Technical_Artical_Spider.settings import EXECUTABLE_PATH
+from pyvirtualdisplay import Display
 import re
 class Anquanke360Spider(scrapy.Spider):
     name = 'anquanke360'
@@ -21,7 +22,14 @@ class Anquanke360Spider(scrapy.Spider):
         'User-Agent': "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:57.0) Gecko/20100101 Firefox/57.0"
     }
     def __init__(self):
-        self.browser = webdriver.Chrome(executable_path=EXECUTABLE_PATH)
+        #设置不加载图片
+        chrome_opt = webdriver.ChromeOptions()
+        prefs = {"profile.managed_default_content_settings.images":2}
+        chrome_opt.add_experimental_option("prefs",prefs)
+        #设置无界面
+        display = Display(visible=0,size=(800,600))
+        display.start()
+        self.browser = webdriver.Chrome(executable_path=EXECUTABLE_PATH,chrome_options=chrome_opt)
         super(Anquanke360Spider,self).__init__()
         dispatcher.connect(self.spider_close,signals.spider_closed)
 
