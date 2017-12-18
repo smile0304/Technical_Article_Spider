@@ -19,7 +19,7 @@ class Article_4houType(DocType):
     content = Text(analyzer="ik_max_word")
 
     class Meta:
-        index = "teachnical_article"
+        index = "teachnical_4hou"
         doc_type = "A_4hou"
 
 

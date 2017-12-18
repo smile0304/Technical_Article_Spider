@@ -17,7 +17,7 @@ class Article_anquankeType(DocType):
     content = Text(analyzer="ik_max_word")
 
     class Meta:
-        index = "teachnical_article"
+        index = "article_anquanke"
         doc_type = "anquanke"
 
 
