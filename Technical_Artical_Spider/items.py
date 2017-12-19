@@ -153,7 +153,7 @@ class ArticleSpider4hou(scrapy.Item):
         article.image_local = self["image_url"]
         article.title = self["title"]
         article.url_id = self["url_id"]
-        article.create_date = self["create_date"]
+        article.create_time = self["create_date"]
         article.url = self["url"]
         article.author = self["author"]
         article.tags = self["tags"]

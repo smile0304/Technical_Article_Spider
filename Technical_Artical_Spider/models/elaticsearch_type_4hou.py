@@ -9,7 +9,7 @@ class Article_4houType(DocType):
     image_local = Keyword()
     title = Text(analyzer="ik_max_word")
     url_id = Keyword()
-    create_date = Date()
+    create_time = Date()
     url = Keyword()
     author = Keyword()
     tags = Text(analyzer="ik_max_word")
