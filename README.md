@@ -18,7 +18,7 @@
 
 > sudo apt-get install python3-pip git xvfb
 >
-> sudo pip install scrapy mysqlclient selenium
+> sudo pip3 install scrapy mysqlclient selenium fake-useragent
 >
 > git clone https://github.com/medcl/elasticsearch-rtf.git
 >
@@ -26,7 +26,7 @@
 
 - Windows安装
 
->pip install scrapy PIL mysqlclient selenium
+>pip install scrapy pillow mysqlclient selenium pypiwin32 fake-useragent
 >
 >git clone https://github.com/smile0304/Technical_Article_Spider.git
 >
@@ -41,75 +41,6 @@
 > EXECUTABLE_PATH="配置google Driver路径信息"
 
 [ChromeDriver下载地址](http://chromedriver.storage.googleapis.com/index.html?path=2.7/)(自备梯子)
-
-#### 使用方法
-
-> python3 Technical_Article_Spider/models/elsticsearch_type_4hou.py
->
-> python3 Technical_Article_Spider/models/elsticsearch_type_anquanke.py
->
-> cd Technical_Article_Spider
->
-> scrapy crawl [ 4hou | anquanke360 ]
-
-#### 如果你想要使用`Mysql`存储数据
-
-- Linux下的安装
-
-  > """ ubuntu下
-  >
-  > sudo apt-get install python3-pip libmysqlclient-dev
-  >
-  > """
-  >
-  > """centos下
-  >
-  > yum install python-devel mysql-devel python3-pip
-  >
-  > """
-  >
-  > sudo pip install scrapy mysqlclient selenium
-  >
-  > git clone https://github.com/smile0304/Technical_Article_Spider.git
-
-
-
-- Windows下的安装
-
-  > pip install scrapy PIL mysqlclient selenium
-  >
-  > git clone https://github.com/smile0304/Technical_Article_Spider.git
-
-  windows下运行需要注释掉`anquanke360.py`中的
-
-  >```python
-  >display = Display(visible=0,size=(800,600))
-  >display.start()
-  >```
-
-  ​
-
-- 配置数据库:
-
-  > vim Technical_Artical_Spider/Technical_Artical_Spider/settings.py
-
-  ```python
-  MYSQL_HOST = "127.0.0.1"
-  MYSQL_DBNAME = "sql_dbname"
-  MYSQL_USER = "root"
-  MYSQL_PASSWORD = "password"
-  ```
-
-  修改数据库名为自己想要的，密码改自己的mysql密码
-
-- 导入数据表结构:
-
-  连接到数据库中后
-
-  > use dbname
-  >
-  > source ~/Technical_Artical_Spider/4hou_Article-struct.sql
-
 
 
 #### 还可以修改的一些配置
@@ -149,7 +80,15 @@ EXECUTABLE_PATH="配置ChromeDriver路径信息"
 
   > update 4hou_Article set image_local = REPLACE(image_local,'full','图片地址')
 
+#### PS：
+
+​	在这个版本更新上来之前发现安全客增加了反爬机制，如果有时间去反~~，还有就是爬`freebuf`的爬虫暂时停一下再写，因为最近一阵子有其他的事情做，搜索引擎的搭建代码也写的差不多了，基于`flask`开发，如果你想要看看源代码，请移步至[Article_Search](https://github.com/smile0304/Article_Search)
+
 #### 更新日志
+
+- 2017年12月23日
+  - 增加任意`User-Agent`
+
 
 - 2017年12月18日
   - 数据分库
