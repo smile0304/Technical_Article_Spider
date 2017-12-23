@@ -47,13 +47,14 @@ ROBOTSTXT_OBEY = False
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'Technical_Artical_Spider.middlewares.TechnicalArticalSpiderSpiderMiddleware': 543,
+#    'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
 #}
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-    'Technical_Artical_Spider.middlewares.ChromMiddleware': 1,
+    #'Technical_Artical_Spider.middlewares.ChromMiddleware': 1,
+    'Technical_Artical_Spider.middlewares.RandomUserAgentMiddleware': 1,
 }
 
 # Enable or disable extensions
@@ -101,5 +102,7 @@ MYSQL_HOST = "127.0.0.1"
 MYSQL_DBNAME = "dbname"
 MYSQL_USER = "root"
 MYSQL_PASSWORD = "password"
-#
-EXECUTABLE_PATH = "/home/tt/chromedriver"
+
+EXECUTABLE_PATH = "/home/tt/chromedriver" #设置chrom路径
+RANDON_UA_TYPE = "random" #设置使用任意useragent头
+

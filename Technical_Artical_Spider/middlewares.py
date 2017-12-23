@@ -6,7 +6,7 @@
 # http://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
-import re
+from fake_useragent import UserAgent
 
 class TechnicalArticalSpiderSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -59,10 +59,31 @@ class TechnicalArticalSpiderSpiderMiddleware(object):
 from scrapy.http import HtmlResponse
 
 class ChromMiddleware(object):
-
+    """
+    使用Chrome浏览器进行访问
+    """
     def process_request(self,request,spider):
         if request.url.startswith("https://www.anquanke.com/post/id/") and spider.name == "anquanke360":
             spider.browser.get(request.url)
             import time
             time.sleep(1.5)
             return HtmlResponse(url=spider.browser.current_url,body=spider.browser.page_source,encoding="utf-8", request=request)
+
+class RandomUserAgentMiddleware(object):
+    """
+        使用任意的User-Agent头
+    """
+    def __init__(self,crawl):
+        super(RandomUserAgentMiddleware, self).__init__()
+        self.ua = UserAgent()
+        self.ua_type = crawl.settings.get("RANDOM_UA_TYPE","random")
+
+    @classmethod
+    def from_crawler(cls,crawler):
+        return cls(crawler)
+
+    def process_request(self,request,spider):
+        def get_ua():
+            return getattr(self.ua,self.ua_type)
+
+        request.headers.setdefault('User-Agent',get_ua())

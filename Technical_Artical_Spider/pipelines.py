@@ -4,8 +4,8 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
-import MySQLdb
-import MySQLdb.cursors
+#import MySQLdb
+#import MySQLdb.cursors
 import scrapy
 import re
 from twisted.enterprise import adbapi
@@ -17,6 +17,7 @@ class TechnicalArticalSpiderPipeline(object):
         return item
 
 #使用twised异步机制插入数据库
+"""
 class MysqlTwistedPipline(object):
     def __init__(self, dbpool):
         self.dbpool = dbpool
@@ -49,7 +50,7 @@ class MysqlTwistedPipline(object):
         #根据不同的item 构建不同的sql语句并插入到mysql中
         insert_sql, params = item.get_insert_sql()
         cursor.execute(insert_sql, params)
-
+"""
 
 #将数据写入elsticsearch
 class ElasticsearchPipline(object):
