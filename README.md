@@ -11,6 +11,7 @@
 
 - Scrapy ==1.4.0
 - elasticsearch-rtf
+- docker
 
 #### 最新版本安装
 
@@ -18,7 +19,7 @@
 
 > sudo apt-get install python3-pip git xvfb
 >
-> sudo pip3 install scrapy mysqlclient selenium fake-useragent
+> sudo pip3 install scrapy mysqlclient scrapy-splash fake-useragent
 >
 > git clone https://github.com/medcl/elasticsearch-rtf.git
 >
@@ -26,22 +27,33 @@
 
 - Windows安装
 
->pip install scrapy pillow mysqlclient selenium pypiwin32 fake-useragent
+>pip install scrapy pillow mysqlclient scrapy-splash pypiwin32 fake-useragent
 >
 >git clone https://github.com/smile0304/Technical_Article_Spider.git
 >
 >git clone https://github.com/medcl/elasticsearch-rtf.git
 
-配置ChromeDriver路径
+`windows`和`linux`相同操作
 
-> vim Technical_Artical_Spider/Technical_Artical_Spider/settings.py
->
-> """修改
->
-> EXECUTABLE_PATH="配置google Driver路径信息"
+需要下载安装[`docker`](https://www.docker.com/community-edition)
 
-[ChromeDriver下载地址](http://chromedriver.storage.googleapis.com/index.html?path=2.7/)(自备梯子)
+- 配置docker国内镜像
 
+  > Linux下配置：
+  >
+  > ​	curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://7db66207.m.daocloud.io
+  >
+  > Windows下右键setting -> Daemon -> Registry mirrors 添加
+  >
+  > http://7db66207.m.daocloud.io
+
+- 拉取镜像
+
+  > docker pull scrapinghub/splash
+
+- 用docker运行`scapinghub/splash`服务
+
+  > docker run -p 8050:8050 scrapinghub/splash
 
 #### 还可以修改的一些配置
 
@@ -54,37 +66,19 @@ AUTOTHROTTLE_MAX_DELAY = 60   #如果网络差的最大等待时长(需要AUTOTH
 
 IMAGES_STORE = os.path.join(project_dir, 'images')	#images为图片的默认存放地址
 
-EXECUTABLE_PATH="配置ChromeDriver路径信息"
 ```
-
-
-
-#### 数据
-
-- 2017年12月8日抓取的数据
-
-  > 链接：https://pan.baidu.com/s/1miOjuRI 密码：7ucx
-
-
-- 2017年12月5日爬去的第一份数据
-
-  > 链接：https://pan.baidu.com/s/1jI3U6Y6 密码：i9fc
-
-  ​
-
-  导入数据
-
-  > source ~/4hou_Article.sql
-
-  如果你想要修改图片的路径信息可以使用如下`sql`语句
-
-  > update 4hou_Article set image_local = REPLACE(image_local,'full','图片地址')
 
 #### PS：
 
-​	在这个版本更新上来之前发现安全客增加了反爬机制，如果有时间去反~~，还有就是爬`freebuf`的爬虫暂时停一下再写，因为最近一阵子有其他的事情做，搜索引擎的搭建代码也写的差不多了，基于`flask`开发，如果你想要看看源代码，请移步至[Article_Search](https://github.com/smile0304/Article_Search)
+​	已突破安全客反爬虫机制，搜索引擎搭建，请移步至[Article_Search](https://github.com/smile0304/Article_Search)
 
 #### 更新日志
+
+- 2017年12月25日
+  - 突破安全客反爬机制
+  - 弃用`selenium`
+  - 增加爬取`freebuf`的数据
+
 
 - 2017年12月23日
   - 增加任意`User-Agent`
