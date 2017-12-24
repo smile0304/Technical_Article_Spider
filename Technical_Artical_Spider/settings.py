@@ -22,7 +22,7 @@ NEWSPIDER_MODULE = 'Technical_Artical_Spider.spiders'
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+#CONCURRENT_REQUESTS = 1
 
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
@@ -55,8 +55,13 @@ ROBOTSTXT_OBEY = False
 DOWNLOADER_MIDDLEWARES = {
     #'Technical_Artical_Spider.middlewares.ChromMiddleware': 1,
     'Technical_Artical_Spider.middlewares.RandomUserAgentMiddleware': 1,
-}
-
+    'scrapy_splash.SplashCookiesMiddleware': 723,
+    'scrapy_splash.SplashMiddleware': 725,
+    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+    }
+SPLASH_URL = 'http://localhost:8050'
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
 #EXTENSIONS = {
@@ -70,8 +75,8 @@ ITEM_PIPELINES = {
     #'Technical_Artical_Spider.pipelines.MysqlTwistedPipline': 30,
     'Technical_Artical_Spider.pipelines.ElasticsearchPipline': 30,
     'Technical_Artical_Spider.pipelines.ArticleImagePipeline': 1,
-    'Technical_Artical_Spider.pipelines.ArticlecontentImagePipline': 10,
-    'Technical_Artical_Spider.pipelines.ArticleHTMLreplacePipline': 20,
+    #'Technical_Artical_Spider.pipelines.ArticlecontentImagePipline': 10,
+    #'Technical_Artical_Spider.pipelines.ArticleHTMLreplacePipline': 20,
 }
 
 IMAGES_URLS_FIELD = "image_url"
@@ -103,6 +108,6 @@ MYSQL_DBNAME = "dbname"
 MYSQL_USER = "root"
 MYSQL_PASSWORD = "password"
 
-EXECUTABLE_PATH = "/home/tt/chromedriver" #设置chrom路径
+EXECUTABLE_PATH = "D:\\chromedriver" #设置chrom路径
 RANDON_UA_TYPE = "random" #设置使用任意useragent头
 

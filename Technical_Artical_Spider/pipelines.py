@@ -10,7 +10,7 @@ import scrapy
 import re
 from twisted.enterprise import adbapi
 from scrapy.pipelines.images import ImagesPipeline
-from Technical_Artical_Spider.items import ArticleSpideranquanke,ArticleSpider4hou
+from Technical_Artical_Spider.items import ArticleSpideranquanke,ArticleSpider4hou,ArticleSpiderfreebuf
 
 class TechnicalArticalSpiderPipeline(object):
     def process_item(self, item, spider):
@@ -77,6 +77,8 @@ class ArticleImagePipeline(ImagesavepathPipline):
             self.path = "Cover_images_anquanke"
         elif isinstance(item,ArticleSpider4hou):
             self.path = "Cover_images_4hou"
+        elif isinstance(item,ArticleSpiderfreebuf):
+            self.path = "Cover_images_freebuf"
         if len(item[self.Cover_image]):
             if isinstance(item,ArticleSpider4hou):
                 for image_content_url in item[self.Cover_image]:

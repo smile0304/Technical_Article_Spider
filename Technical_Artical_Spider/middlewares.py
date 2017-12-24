@@ -66,7 +66,7 @@ class ChromMiddleware(object):
         if request.url.startswith("https://www.anquanke.com/post/id/") and spider.name == "anquanke360":
             spider.browser.get(request.url)
             import time
-            time.sleep(1.5)
+            time.sleep(3)
             return HtmlResponse(url=spider.browser.current_url,body=spider.browser.page_source,encoding="utf-8", request=request)
 
 class RandomUserAgentMiddleware(object):

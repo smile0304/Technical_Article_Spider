@@ -8,9 +8,11 @@ from scrapy.loader import ItemLoader
 from scrapy.loader.processors import TakeFirst,MapCompose,Join,Identity
 from Technical_Artical_Spider.models.elaticsearch_type_4hou import Article_4houType
 from Technical_Artical_Spider.models.elaticsearch_type_anquanke import Article_anquankeType
+from Technical_Artical_Spider.models.elaticsearch_type_freebuf import Article_freebuf
 from elasticsearch_dsl.connections import connections
 es_4hou = connections.create_connection(Article_4houType._doc_type.using)
 es_anquanke = connections.create_connection(Article_anquankeType._doc_type.using)
+es_anquanke = connections.create_connection(Article_freebuf._doc_type.using)
 import scrapy
 
 def gen_suggests(es,index,info_tuple):
@@ -80,6 +82,8 @@ def seturl(value):
         return value
     else:
         return "http://www.4hou.com"+value
+def listtransstr(value):
+    return "".join(value)
 
 #嘶吼文章Item
 class ArticleSpider4hou(scrapy.Item):
@@ -166,6 +170,48 @@ class ArticleSpider4hou(scrapy.Item):
 
         return
 
+#Freebuf文章Item
+class ArticleSpiderfreebuf(scrapy.Item):
+    image_local = scrapy.Field()  # 图片本地地址
+    image_url = scrapy.Field(
+        output_processor=MapCompose(return_value)
+    )  # 图片地址
+    title = scrapy.Field()  # 文章标题
+    create_date = scrapy.Field()  # 发布日期
+    url = scrapy.Field()  # 原文地址
+    url_id = scrapy.Field()  # 经过md5加密过后的url  作为主键
+    author = scrapy.Field()  # 作者
+    tags = scrapy.Field(
+        output_processor=MapCompose(listtransstr)
+    )  # 标签
+    watch_num = scrapy.Field(
+        input_processor=MapCompose(return_intvalue)
+    )  # 观看数量
+    comment_num = scrapy.Field(
+        input_processor=MapCompose(return_intvalue)
+    )  # 评论数量
+    content = scrapy.Field()  # 文章正文
+
+    def save_to_es(self):
+        article = Article_freebuf()
+        article.image_local = self["image_url"]
+        article.title = self["title"]
+        article.url_id = self["url_id"]
+        article.create_time = self["create_date"]
+        article.url = self["url"]
+        article.author = self["author"]
+        article.tags = self["tags"]
+        article.watch_nums = self["watch_num"]
+        if self["comment_num"]:
+            article.comment_nums = self["comment_num"]
+        else:
+            article.comment_nums = 0
+        article.content = self["content"]
+        article.suggest = gen_suggests(es_4hou,Article_4houType._doc_type.index,((article.title,10),(article.tags,7)))
+        article.save()
+
+        return
+
 #安全客文章Iten
 class ArticleSpideranquanke(scrapy.Item):
     id = scrapy.Field()
@@ -228,3 +274,4 @@ class ArticleSpideranquanke(scrapy.Item):
         article.save()
 
         return
+
